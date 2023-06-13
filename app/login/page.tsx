@@ -27,13 +27,15 @@ function Login() {
     
   });
 
-  return (
-    <>
-      <form onSubmit={onSubmit}>
+  return(
+     
+    <div className="container">
+      <form onSubmit={onSubmit} className="form">
         <label htmlFor="email">Email:</label>
         <input
           id="email"
           type="text"
+          className="input"
           {...register("email", {
             required: "Email is required",
             pattern: {
@@ -42,12 +44,13 @@ function Login() {
             },
           })}
         />
-        {errors.email && <p>{errors.email.message}</p>}
+        {errors.email && <div className="errorText">{errors.email.message}</div>}
 
         <label htmlFor="password">Password:</label>
         <input
           id="password"
           type="password"
+          className="input"
           {...register("password", {
             required: "Password is required",
             minLength: {
@@ -61,17 +64,18 @@ function Login() {
             },
           })}
         />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && <div className="errorText">{errors.password.message}</div>}
 
-        <button type="submit">Login</button>
-      </form>
-      <div>
+        <button type="submit" className="button">Login</button>
+        <div>
         <span>
           Don't have an account?
           <Link href="/register">Register</Link>
         </span>
       </div>
-    </>
+      </form>
+     
+    </div>
   );
 }
 
