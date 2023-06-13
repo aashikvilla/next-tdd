@@ -1,8 +1,11 @@
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Login from '@/app/login/page';
 import { toast } from 'react-toastify';
-import * as api from '../../../app/login/LoginApiCalls' // /app/login/LoginApiCalls';
+import * as api from '../../../app/login/LoginApiCalls' 
 import userEvent from '@testing-library/user-event';
+import { LoginConstants } from '@/__tests__/__utils__/testConstants';
+import { fillInputField } from '@/__tests__/__utils__/helperFunctions';
+
 
 jest.mock('../../../app/login/LoginApiCalls');
 jest.mock('react-toastify', () => ({
@@ -13,6 +16,12 @@ jest.mock('react-toastify', () => ({
 }));
 
 
+const clickLoginButton = async () => {
+  const loginButtonElement = screen.getByRole('button', { name: LoginConstants.loginButton });  
+  await userEvent.click(loginButtonElement);  
+};
+
+
 describe('Login form', () => {
   beforeEach(() => {
     jest.clearAllMocks()    
@@ -20,83 +29,62 @@ describe('Login form', () => {
   });
 
   it('renders an email input field', () => {
-    const emailElement = screen.getByLabelText(/email/i);
+    const emailElement = screen.getByLabelText(LoginConstants.emailLabel);
     expect(emailElement).toBeInTheDocument();
   });
 
   it('renders a password input field', () => {
-    const passwordElement = screen.getByLabelText(/password/i);
+    const passwordElement = screen.getByLabelText(LoginConstants.passwordLabel);
     expect(passwordElement).toBeInTheDocument();
   });
 
   it('renders a login button', () => {
-    const loginButtonElement = screen.getByRole('button', { name: /login/i });
+    const loginButtonElement = screen.getByRole('button', { name: LoginConstants.loginButton });
     expect(loginButtonElement).toBeInTheDocument();
   });
 
   it('renders a link to the registration page', () => {
-    const registerLinkElement = screen.getByRole('link', { name: /register/i });
+    const registerLinkElement = screen.getByRole('link', { name: LoginConstants.registerLink });
     expect(registerLinkElement).toBeInTheDocument();
     expect(registerLinkElement).toHaveAttribute('href', '/register');
   });
 
-
   describe('Password validation', () => {
-    it('displays an error when password is not provided', async () => {      
-      const loginButtonElement = screen.getByRole('button', { name: /login/i });
-  
-      fireEvent.click(loginButtonElement);
-  
-      const passwordErrorElement = await screen.findByText('Password is required');
+    it('displays an error when password is not provided', async () => {
+      await clickLoginButton();
+      const passwordErrorElement = await screen.findByText(LoginConstants.passwordIsRequired);
       expect(passwordErrorElement).toBeInTheDocument();
     });
-  
+
     it('displays an error when password is less than 8 characters', async () => {
-      const passwordElement = screen.getByLabelText(/password/i);
-      const loginButtonElement = screen.getByRole('button', { name: /login/i });
-  
-      fireEvent.change(passwordElement, { target: { value: '123' } });
-      fireEvent.click(loginButtonElement);
-  
-      const passwordErrorElement = await screen.findByText('Password should be at least 8 characters long');
+      fillInputField(LoginConstants.passwordLabel, '123');
+      await clickLoginButton();
+      const passwordErrorElement = await screen.findByText(LoginConstants.passwordLengthError);
       expect(passwordErrorElement).toBeInTheDocument();
     });
-  
+
     it('displays an error when password does not contain required types of characters', async () => {
-      const passwordElement = screen.getByLabelText(/password/i);
-      const loginButtonElement = screen.getByRole('button', { name: /login/i });
-  
-      fireEvent.change(passwordElement, { target: { value: 'abcdefgh' } });
-      fireEvent.click(loginButtonElement);
-  
-      const passwordErrorElement = await screen.findByText('Password should contain at least 1 number, lowercase and uppercase letter');
+      fillInputField(LoginConstants.passwordLabel, 'abcdefgh');
+      await clickLoginButton();
+      const passwordErrorElement = await screen.findByText(LoginConstants.passwordTypeError);
       expect(passwordErrorElement).toBeInTheDocument();
     });
   });
-
 
   describe('Email validation', () => {
-    it('displays an error when email is not provided', async () => {    
-      const loginButtonElement = screen.getByRole('button', { name: /login/i });
-  
-      fireEvent.click(loginButtonElement);
-  
-      const emailErrorElement = await screen.findByText('Email is required');
+    it('displays an error when email is not provided', async () => {
+      await clickLoginButton();
+      const emailErrorElement = await screen.findByText(LoginConstants.emailIsRequired);
       expect(emailErrorElement).toBeInTheDocument();
     });
-  
+
     it('displays an error when email format is invalid', async () => {
-      const emailElement = screen.getByLabelText(/email/i);
-      const loginButtonElement = screen.getByRole('button', { name: /login/i });
-  
-      fireEvent.change(emailElement, { target: { value: 'not-valid-email' } });
-      fireEvent.click(loginButtonElement);
-  
-      const emailErrorElement = await screen.findByText('Email should be in proper format: abc@example.com');
+      fillInputField(LoginConstants.emailLabel, 'not-valid-email');
+      await clickLoginButton();
+      const emailErrorElement = await screen.findByText(LoginConstants.invalidEmailFormat);
       expect(emailErrorElement).toBeInTheDocument();
     });
   });
-
 });
 
 
@@ -111,16 +99,11 @@ describe('Login on submit',()=>{
     mockValidateLogin.mockRejectedValueOnce(new Error('Invalid credentials'));
 
     render(<Login />);
+    fillInputField(LoginConstants.emailLabel, 'test@example.com');
+    fillInputField(LoginConstants.passwordLabel, 'Password123');
+    await  clickLoginButton();
 
-    const emailElement = screen.getByLabelText(/email/i);
-    const passwordElement = screen.getByLabelText(/password/i);
-    const loginButtonElement = screen.getByRole('button', { name: /login/i });
-
-    fireEvent.change(emailElement, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordElement, { target: { value: 'Password123' } });
-     
-     await userEvent.click(loginButtonElement);   
-     expect(toast.error).toHaveBeenCalledWith('Invalid credentials');
+    expect(toast.error).toHaveBeenCalledWith('Invalid credentials');
     
   });
 
@@ -129,16 +112,12 @@ describe('Login on submit',()=>{
     
     const mockValidateLogin = jest.spyOn(api, 'validateLogin');
     mockValidateLogin.mockResolvedValueOnce({ success: true });
+
     render(<Login />);
+    fillInputField(LoginConstants.emailLabel, 'test@example.com');
+    fillInputField(LoginConstants.passwordLabel, 'Password123');
+    await  clickLoginButton();
 
-    const emailElement = screen.getByLabelText(/email/i);
-    const passwordElement = screen.getByLabelText(/password/i);
-    const loginButtonElement = screen.getByRole('button', { name: /login/i });
-
-    fireEvent.change(emailElement, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordElement, { target: { value: 'Password123' } });
-   
-    await userEvent.click(loginButtonElement);   
     expect(toast.success).toHaveBeenCalledWith('Logged in successfully');
 
   });
