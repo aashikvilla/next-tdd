@@ -1,10 +1,7 @@
+import { ApiRouteConstants } from "../ApiService/ApiRouteConstants";
+import ApiService from "../ApiService/ApiService";
 import { LoginData } from "./page";
 
 export const validateLogin = async (data:LoginData) => {
-  // TODO: connect to backed api later
-    
-  return new Promise((resolve, reject) => {
-    resolve(true);
-  });
-  
+  return ApiService.post(ApiRouteConstants.Auth.Login, data);
 };

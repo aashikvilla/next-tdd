@@ -1,13 +1,12 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import Login from '@/app/login/page';
 import { toast } from 'react-toastify';
-import * as api from '../../../app/login/LoginApiCalls' 
 import userEvent from '@testing-library/user-event';
 import { LoginConstants } from '@/__tests__/__utils__/testConstants';
 import { fillInputField } from '@/__tests__/__utils__/helperFunctions';
+import { server } from '@/__tests__/__mocks__/server';
 
 
-jest.mock('../../../app/login/LoginApiCalls');
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -57,14 +56,14 @@ describe('Login form', () => {
     });
 
     it('displays an error when password is less than 8 characters', async () => {
-      fillInputField(LoginConstants.passwordLabel, '123');
+      fillInputField(LoginConstants.passwordLabel, LoginConstants.shortPassword);
       await clickLoginButton();
       const passwordErrorElement = await screen.findByText(LoginConstants.passwordLengthError);
       expect(passwordErrorElement).toBeInTheDocument();
     });
 
     it('displays an error when password does not contain required types of characters', async () => {
-      fillInputField(LoginConstants.passwordLabel, 'abcdefgh');
+      fillInputField(LoginConstants.passwordLabel, LoginConstants.invalidPassword);
       await clickLoginButton();
       const passwordErrorElement = await screen.findByText(LoginConstants.passwordTypeError);
       expect(passwordErrorElement).toBeInTheDocument();
@@ -79,7 +78,7 @@ describe('Login form', () => {
     });
 
     it('displays an error when email format is invalid', async () => {
-      fillInputField(LoginConstants.emailLabel, 'not-valid-email');
+      fillInputField(LoginConstants.emailLabel, LoginConstants.invalidEmail);
       await clickLoginButton();
       const emailErrorElement = await screen.findByText(LoginConstants.invalidEmailFormat);
       expect(emailErrorElement).toBeInTheDocument();
@@ -90,32 +89,41 @@ describe('Login form', () => {
 
 describe('Login on submit',()=>{
 
-  beforeEach(() => {
+  beforeAll(() => {
+    server.listen()
+  })
+
+  afterEach(() => {
+    server.resetHandlers();
     jest.clearAllMocks()   
-  });
+  })
+
+  afterAll(() => {
+    server.close()
+  })
+
 
   it('displays an error toast when credentials are incorrect', async () => {
-    const mockValidateLogin = jest.spyOn(api, 'validateLogin');
-    mockValidateLogin.mockRejectedValueOnce(new Error('Invalid credentials'));
-
+   
     render(<Login />);
-    fillInputField(LoginConstants.emailLabel, 'test@example.com');
-    fillInputField(LoginConstants.passwordLabel, 'Password123');
+    const {email,password}= LoginConstants.invalidCredentials;
+    console.log("pw",password);
+    fillInputField(LoginConstants.emailLabel,email);
+    fillInputField(LoginConstants.passwordLabel,password);
     await  clickLoginButton();
-
     expect(toast.error).toHaveBeenCalledWith('Invalid credentials');
     
   });
-
+ 
   
   it('displays a success toast when login is successful', async () => {
-    
-    const mockValidateLogin = jest.spyOn(api, 'validateLogin');
-    mockValidateLogin.mockResolvedValueOnce({ success: true });
-
+   
     render(<Login />);
-    fillInputField(LoginConstants.emailLabel, 'test@example.com');
-    fillInputField(LoginConstants.passwordLabel, 'Password123');
+    const {email,password}= LoginConstants.validCredentials;
+    console.log("pw",password);
+    fillInputField(LoginConstants.emailLabel,email);
+    fillInputField(LoginConstants.passwordLabel,password);
+    
     await  clickLoginButton();
 
     expect(toast.success).toHaveBeenCalledWith('Logged in successfully');
