@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { API_URL } from '@/app/apiService/ApiService'
+import { API_URL } from '@/app/apiService/AxiosSetUp'
 import { mockLoginApi } from './login'
 
 export const handlers = [

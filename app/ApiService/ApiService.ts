@@ -1,10 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-
-export const API_URL = 'https://demo9689581.mockable.io/';
-
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-});
+import { axiosInstance } from './AxiosSetUp';
 
 
 /**
@@ -23,7 +18,7 @@ const request = async (method: string, url: string, body?: any): Promise<any> =>
       url,
       data: body,
     });
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.error(`Failed to perform ${method.toUpperCase()} request to ${url}:`, error);
     throw error;
