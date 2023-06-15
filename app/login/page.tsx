@@ -1,8 +1,10 @@
 'use client'
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { validateLogin } from './LoginApiCalls';
+import {validateLogin} from './loginApiCalls'
+
 import { toast } from 'react-toastify';
+
 //import { useRouter } from "next/navigation";
 
 

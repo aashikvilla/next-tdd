@@ -1,5 +1,5 @@
-import { ApiRouteConstants } from "../ApiService/ApiRouteConstants";
-import ApiService from "../ApiService/ApiService";
+import { ApiRouteConstants } from "../apiService/ApiRouteConstants";
+import ApiService from "../apiService/ApiService";
 import { LoginData } from "./page";
 
 export const validateLogin = async (data:LoginData) => {

@@ -10,7 +10,7 @@ const createJestConfig = nextJest({
 const config = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testPathIgnorePatterns:['__tests__/__utils__','__tests__/__mocks__'],
+  testPathIgnorePatterns:['__tests__/__utils__','__tests__/__mocks__','__tests__/__fixtures__'],
  
   testEnvironment: 'jest-environment-jsdom',
 }

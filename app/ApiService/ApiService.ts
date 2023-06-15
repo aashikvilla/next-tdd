@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const API_URL = 'https://demo9689581.mockable.io/';
+export const API_URL = 'https://demo9689581.mockable.io/';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
