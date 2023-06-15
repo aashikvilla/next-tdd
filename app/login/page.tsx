@@ -6,7 +6,7 @@ import {validateLogin} from './loginApiCalls'
 import { toast } from 'react-toastify';
 import { ToastConstants } from '../constants/ToastConstants';
 
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 export type LoginData = {
@@ -15,13 +15,13 @@ export type LoginData = {
 };
 
 function Login() {
-  //const router = useRouter();
+  const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginData>();
   
   const onSubmit = handleSubmit((data:LoginData) => {
     console.log(data);
     validateLogin(data).then(()=>{
-        //router.push('/dashboard');
+        router.push('/dashboard');
         toast.success(ToastConstants.loginSuccess);
     })
     .catch(()=>{
