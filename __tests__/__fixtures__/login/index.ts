@@ -10,5 +10,5 @@ export const LoginFakeData = {
   },
   invalidEmail: faker.person.fullName(),
   invalidPassword: faker.person.fullName(),
-  shortPassword: faker.internet.password().substring(0, 6),
+  shortPassword: faker.internet.password({length : 6}),
 };

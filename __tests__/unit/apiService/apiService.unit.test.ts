@@ -18,7 +18,7 @@ describe("ApiService", () => {
   });
 
   it("should make a POST request with the correct parameters", async () => {
-    //Define the endpoint and data
+    
     const endpoint = faker.internet.domainWord();
     const data = { test: faker.location.city() };
     (axiosInstance.request as jest.Mock).mockResolvedValue({

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import {validateLogin} from './loginApiCalls'
 
 import { toast } from 'react-toastify';
+import { ToastConstants } from '../constants/ToastConstants';
 
 //import { useRouter } from "next/navigation";
 
@@ -21,10 +22,10 @@ function Login() {
     console.log(data);
     validateLogin(data).then(()=>{
         //router.push('/dashboard');
-        toast.success('Logged in successfully');
+        toast.success(ToastConstants.loginSuccess);
     })
     .catch(()=>{
-        toast.error('Invalid credentials');
+        toast.error(ToastConstants.invalidCredentials);
     })
     
   });
