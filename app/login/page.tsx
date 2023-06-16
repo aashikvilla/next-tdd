@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { ToastConstants } from '../constants/ToastConstants';
 
 import { useRouter } from "next/navigation";
+import { UserState, loginUser } from '../store/features/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 
 export type LoginData = {
@@ -15,14 +17,17 @@ export type LoginData = {
 };
 
 function Login() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginData>();
   
   const onSubmit = handleSubmit((data:LoginData) => {
     console.log(data);
-    validateLogin(data).then(()=>{
+    validateLogin(data).then((res:UserState)=>{
+     
         router.push('/dashboard');
         toast.success(ToastConstants.loginSuccess);
+        dispatch(loginUser(res));
     })
     .catch(()=>{
         toast.error(ToastConstants.invalidCredentials);

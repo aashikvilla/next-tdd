@@ -9,6 +9,8 @@ import {
 import { LoginFakeData } from "@/__tests__/__fixtures__/login";
 import * as api from "../../../app/login/loginApiCalls";
 import { ToastConstants } from "@/app/constants/ToastConstants";
+import { useDispatch } from 'react-redux';
+
 
 jest.mock("../../../app/login/loginApiCalls");
 jest.mock("react-toastify", () => ({
@@ -16,6 +18,10 @@ jest.mock("react-toastify", () => ({
     success: jest.fn(),
     error: jest.fn(),
   },
+}));
+
+jest.mock("react-redux", () => ({
+  useDispatch:  jest.fn()
 }));
 
 describe("Login form", () => {

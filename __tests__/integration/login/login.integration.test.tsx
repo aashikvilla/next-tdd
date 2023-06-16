@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { LoginFakeData } from "@/__tests__/__fixtures__/login";
 import { LoginTestConstants } from "@/__tests__/__utils__/testConstants";
 import { ToastConstants } from "@/app/constants/ToastConstants";
+import { Wrapper } from "@/__tests__/__utils__/Wrapper";
 
 jest.mock("react-toastify", () => ({
   toast: {
@@ -32,7 +33,7 @@ describe("Intergration : Login on submit", () => {
   });
 
   it("displays an error toast when credentials are incorrect", async () => {
-    render(<Login />);
+    render(<Wrapper><Login /></Wrapper>);
     const { email, password } = LoginFakeData.invalidCredentials;
     fillInputField(LoginTestConstants.emailLabel, email);
     fillInputField(LoginTestConstants.passwordLabel, password);
@@ -43,7 +44,7 @@ describe("Intergration : Login on submit", () => {
   });
 
   it("displays a success toast when login is successful", async () => {
-    render(<Login />);
+    render(<Wrapper><Login /></Wrapper>);
     const { email, password } = LoginFakeData.validCredentials;
     fillInputField(LoginTestConstants.emailLabel, email);
     fillInputField(LoginTestConstants.passwordLabel, password);
