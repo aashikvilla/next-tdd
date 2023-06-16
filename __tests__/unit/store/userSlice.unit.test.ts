@@ -1,5 +1,5 @@
 import { mockUserData } from "@/__tests__/__fixtures__/store";
-import userReducer, { UserState, initialUserState, loginUser, logoutUser } from "@/app/store/features/user/userSlice";
+import userReducer, { initialUserState, loginUser, logoutUser } from "@/app/store/features/user/userSlice";
 
 
 describe('user slice', () => {
@@ -11,33 +11,17 @@ describe('user slice', () => {
     });
 
     it('should properly set the user data when loginUser action is dispatched', () => {
-        const data = mockUserData;
-        const expectedState = {
-          ...data
-        };
-  
-      const nextState = userReducer(initialUserState, loginUser(data));
+      const userData = mockUserData;
+      
+      const nextState = userReducer(initialUserState, loginUser(userData));
 
-      expect(nextState).toEqual(data);
+      expect(nextState).toEqual(userData);
     });
 
     it('should reset to initial state when logoutUser action is dispatched', () => {
-      // Arrange
-      const mockUserData1: UserState = {
-        userId: "1",
-        firstName: "John",
-        lastName: "Doe",
-        token: "token123",
-      };
-      const preLogoutState = {
-        ...initialUserState,
-        ...mockUserData1
-      };
+    
+      const nextState = userReducer(mockUserData, logoutUser());
 
-      // Act
-      const nextState = userReducer(preLogoutState, logoutUser());
-
-      // Assert
       expect(nextState).toEqual(initialUserState);
     });
   });
