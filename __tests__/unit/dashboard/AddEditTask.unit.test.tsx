@@ -1,4 +1,4 @@
-import { taskFields } from "@/__tests__/__fixtures__/tasks";
+import { mockTask, taskFields } from "@/__tests__/__fixtures__/tasks";
 import { fillInputField } from "@/__tests__/__utils__/helperFunctions";
 import AddEditTask from "@/app/dashboard/AddEditTask";
 import { saveTask } from "@/app/dashboard/taskApiCalls";
@@ -35,5 +35,18 @@ describe("AddEditTask component", () => {
     await userEvent.click(saveButtonElement);
 
     expect(saveTask).toHaveBeenCalled();
+  });
+
+  test("renders default values in input fields", () => {
+    const taskDetails = { ...mockTask };
+
+    render(<AddEditTask taskDetails={taskDetails} />);
+
+    Object.entries(taskDetails).forEach(([id, defaultValue]) => {
+      if (id !== "id") {
+        const inputElement = screen.getByLabelText(new RegExp(id, "i"));
+        expect(inputElement).toHaveValue(defaultValue);
+      }
+    });
   });
 });
