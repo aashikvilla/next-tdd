@@ -37,7 +37,7 @@ describe("AddEditTask component", () => {
     expect(saveTask).toHaveBeenCalled();
   });
 
-  test("renders default values in input fields", () => {
+  it("renders default values in input fields", () => {
     const taskDetails = { ...mockTask };
 
     render(<AddEditTask taskDetails={taskDetails} />);
