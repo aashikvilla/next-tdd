@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 import { getAllTasks } from "./taskApiCalls";
+//import CustomModal from "../components/Modal";
+import { useModal } from "../hooks/useModal";
+import CustomModal from "../components/CustomModal";
 
 
 
@@ -49,6 +52,7 @@ function Dashboard() {
   const columns = TaskColumns;
 
   const [rows, setRows] = useState([]);
+  const {isOpen, openModal , closeModal} =useModal();
 
   useEffect(() => {
     getAllTasks()
@@ -62,11 +66,21 @@ function Dashboard() {
       });
   }, []);
 
+
+  const handleAddEditClick=()=>{
+
+  }
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-wrapper">
         <div>Dashboard</div>
+        <button onClick={openModal}>Add Task</button>
         <Table rows={rows} columns={columns} />
+        <CustomModal isOpen={isOpen} closeModal={closeModal} header="Task Modal">
+        {/* Render your add/edit form here */}
+        <button onClick={handleAddEditClick}>Add/Edit Task</button>
+      </CustomModal>
       </div>
     </div>
   );
