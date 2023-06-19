@@ -1,42 +1,48 @@
 import { taskFields } from "@/__tests__/__fixtures__/tasks";
+import { fillInputField } from "@/__tests__/__utils__/helperFunctions";
 import AddEditTask from "@/app/dashboard/AddEditTask";
 import { saveTask } from "@/app/dashboard/taskApiCalls";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 
 
-jest.mock("../pages/taskApiCalls");
+jest.mock("../../../app/dashboard/taskApiCalls");
 
 
 
 describe('AddEditTask component', () => {
-
     
     taskFields.forEach(({ id, errorMessage }) => {
-    test(`renders ${id} field`, async () => {
+    it(`renders ${id} field`, async () => {
       render(<AddEditTask taskDetails={null} />);
       const inputElement = screen.getByLabelText(id);
       expect(inputElement).toBeInTheDocument();
     });
   
-    test(`shows error message for ${id} when empty`, async () => {
-      render(<AddEditTask taskDetails={null} />);
-      const inputElement = screen.getByLabelText(id);
-      fireEvent.blur(inputElement);
+    it(`shows error message for ${id} when empty`, async () => {
+      render(<AddEditTask taskDetails={null} />);     
+      const saveButtonElement = screen.getByRole('button', { name: /save/i });  
+      await userEvent.click(saveButtonElement);  
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
     });
   });
 
 
   
-  test('calls saveTask on form submission with valid input', () => {
+  it('calls saveTask on form submission with valid input', async() => {
    
     render(<AddEditTask taskDetails={null} />);
-    taskFields.forEach(({ id, value }) => {
-      const inputElement = screen.getByLabelText(id);
-      userEvent.type(inputElement, value);
-    });
-    userEvent.click(screen.getByText(/save/i));
+
+    for (let field of taskFields) {
+      const { id, value } = field;
+      fillInputField(id,value)    
+    }
+
+    const saveButtonElement = screen.getByRole('button', { name: /save/i });  
+    await userEvent.click(saveButtonElement);
+
     expect(saveTask).toHaveBeenCalled();
   });
+
+  
 });

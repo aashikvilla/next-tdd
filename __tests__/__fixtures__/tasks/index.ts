@@ -27,8 +27,8 @@ export const mockTaskList: Task[] = faker.helpers.multiple(createTask, {
 
 
 export const taskFields = [
-  { id: "title", errorMessage: "Title is required", value: faker.lorem.words() },
-  { id: "description", errorMessage: "Description is required", value: faker.lorem.sentence() },
-  { id: "status", errorMessage: "Status is required", value: faker.lorem.word() },
-  { id: "priority", errorMessage: "Priority is required", value: faker.lorem.word() },
+  { id: "Title", errorMessage: "Title is required", value: faker.lorem.words() },
+  { id: "Description", errorMessage: "Description is required", value: faker.lorem.sentence() },
+  { id: "Status", errorMessage: "Status is required", value: faker.lorem.word() },
+  { id: "Priority", errorMessage: "Priority is required", value: faker.lorem.word() },
 ];
