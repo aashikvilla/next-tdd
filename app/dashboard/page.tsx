@@ -53,7 +53,7 @@ function Dashboard() {
   useEffect(() => {
     getAllTasks()
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setRows(data);
       })
       .catch((error) => {
