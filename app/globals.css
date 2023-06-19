@@ -38,3 +38,56 @@
   height: 1rem; 
   margin-top: -0.5rem; 
 }
+
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4; /* light grey background */
+}
+
+/* Dashboard Wrapper Styles */
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column; /* stack child elements vertically */
+  align-items: center; /* center child elements horizontally */
+  width: 80%; /* adjust width as needed */
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15); /* subtle shadow */
+}
+
+.dashboard-wrapper > div:first-child {
+  margin-bottom: 20px; /* space between "Dashboard" title and the table */
+  font-size: 24px; /* adjust font size as needed */
+  font-weight: bold;
+}
+
+header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+  background-color:#959595; /* adjust color as needed */
+  color: white;
+}
+
+header p {
+  margin-right: 10px; /* space between the name and the button */
+}
+
+header button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  color: #007a5d; /* adjust color as needed */
+  cursor: pointer;
+}
+
+header button:hover {
+  background-color: #ddd; /* light grey on hover */
+}
+

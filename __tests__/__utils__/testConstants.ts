@@ -10,3 +10,12 @@ export const LoginTestConstants = {
   invalidEmailFormat: "Email should be in proper format: abc@example.com",
 };
   
+export const HeaderTestConstants={
+  loginButton: /login/i,
+  logoutButton: /logout/i,
+}
+
+export const DashboardTestConstants={
+  Columns : ['Id','Title','Description','Status','Priority','Action'],
+  DashboardHeading :/Dashboard/i
+}

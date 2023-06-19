@@ -11,6 +11,10 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.13.5",
+    "@mui/x-data-grid": "^6.8.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
