@@ -91,3 +91,20 @@ header button:hover {
   background-color: #ddd; /* light grey on hover */
 }
 
+.filter-button {
+  background-color: lightgray;
+  color: black;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover,
+.filter-button.selected {
+  background-color: darkblue;
+  color: white;
+}
+

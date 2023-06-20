@@ -14,7 +14,6 @@ describe("Dashboard", () => {
   it(`renders dashboard`, async () => {
     render(<Dashboard />);
     
-    //const columnHeader = await screen.findByText(/Dashboard/i);
     const header = await screen.findByText(DashboardTestConstants.DashboardHeading);
     expect(header).toBeInTheDocument();
   });
