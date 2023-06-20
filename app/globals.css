@@ -104,7 +104,6 @@ header button:hover {
 
 .filter-button:hover,
 .filter-button.selected {
-  background-color: darkblue;
+  background-color: #007a5d; 
   color: white;
 }
-

@@ -18,6 +18,20 @@ describe("Dashboard", () => {
     expect(header).toBeInTheDocument();
   });
 
+  describe("Rendering all filter buttons", () => {
+    DashboardTestConstants.Status.forEach((status) => {
+      it(`renders ${status} button`, async () => {
+        const regexPattern = new RegExp(status, "i");
+        render(<Dashboard />);
+  
+        await waitFor(() => {
+          const statusButton = screen.getByRole("button", { name: regexPattern });
+          expect(statusButton).toBeInTheDocument();
+        });
+      });
+    });
+  });
+
   describe("Rendering all columns", () => {
     DashboardTestConstants.Columns.forEach((column) => {
       it(`renders ${column} column`, async () => {

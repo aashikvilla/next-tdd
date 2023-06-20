@@ -83,7 +83,8 @@ function Dashboard() {
         <div className="dashboard-wrapper">
           <div>Dashboard</div>
           <Filter />
-          <button
+          <div style={{display:'flex', justifyContent:'right', padding:'10px'}}>
+          <button className="button"
             onClick={() => {
               setTaskDetails(null);
               openModal();
@@ -91,6 +92,9 @@ function Dashboard() {
           >
             Add Task
           </button>
+
+          </div>
+         
           <Table rows={rows.filter(r=>r.status.includes(selectedStatus))} columns={columns} />
           <CustomModal
             isOpen={isOpen}
