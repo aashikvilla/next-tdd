@@ -17,5 +17,6 @@ export const HeaderTestConstants={
 
 export const DashboardTestConstants={
   Columns : ['Id','Title','Description','Status','Priority','Action'],
-  DashboardHeading :/Dashboard/i
+  DashboardHeading :/Dashboard/i,
+  Status : ['NOT STARTED', 'IN PROGRESS','COMPLETED']
 }

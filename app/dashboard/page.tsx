@@ -1,41 +1,41 @@
-"use client"
-import {
-  GridColDef,
-  GridRenderCellParams,
-} from "@mui/x-data-grid";
+"use client";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import Table from "../components/Table";
-import { useEffect, useState } from "react";
-
+import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getAllTasks } from "./taskApiCalls";
-//import CustomModal from "../components/Modal";
 import { useModal } from "../hooks/useModal";
 import CustomModal from "../components/CustomModal";
 import AddEditTask from "./AddEditTask";
-
-
+import Filter from "./filter/Filter";
 
 export type Task = {
-  id: string,
-  title: string,
-  description: string,
-  status: string,
-  priority: string 
-}
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+};
 
-
-
-
-
+type DashboardContextType = {
+  selectedStatus: string;
+  setSelectedStatus: React.Dispatch<React.SetStateAction<string>>;
+};
+const defaultDashboardContextValue: DashboardContextType = {
+  selectedStatus: "",
+  setSelectedStatus: () => {}, // Empty function, you might want to provide an actual implementation
+};
+export const DashboardContext = createContext<DashboardContextType>(
+  defaultDashboardContextValue
+);
 
 function Dashboard() {
-
   const TaskColumns: GridColDef[] = [
-    { field: "id", headerName: "Id"},
-    { field: "title", headerName: "Title"},
+    { field: "id", headerName: "Id" },
+    { field: "title", headerName: "Title" },
     { field: "description", headerName: "Description" },
     { field: "status", headerName: "Status" },
-    { field: "priority", headerName: "Priority"},
+    { field: "priority", headerName: "Priority" },
     {
       field: "ss",
       headerName: "Action",
@@ -44,8 +44,8 @@ function Dashboard() {
       width: 160,
       renderCell: (params: GridRenderCellParams) => (
         <>
-        {params.row.id}
-          <button onClick={()=>handleEdit(params.row)}>Edit</button>
+          {params.row.id}
+          <button onClick={() => handleEdit(params.row)}>Edit</button>
           <button>Delete</button>
         </>
       ),
@@ -54,9 +54,11 @@ function Dashboard() {
 
   const columns = TaskColumns;
 
-  const [rows, setRows] = useState([]);
-  const {isOpen, openModal , closeModal} =useModal();
-  const [taskDetails, setTaskDetails] = useState<Task|null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+  const [rows, setRows] = useState<Task[]>([]);
+  const { isOpen, openModal, closeModal } = useModal();
+  const [taskDetails, setTaskDetails] = useState<Task | null>(null);
 
   useEffect(() => {
     getAllTasks()
@@ -70,24 +72,40 @@ function Dashboard() {
       });
   }, []);
 
-  const handleEdit=(data:Task)=>{
+  const handleEdit = (data: Task) => {
     setTaskDetails(data);
-  }
-
-
+    openModal();
+  };
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-wrapper">
-        <div>Dashboard</div>
-        <button onClick={openModal}>Add Task</button>
-        <Table rows={rows} columns={columns} />
-        <CustomModal isOpen={isOpen} closeModal={closeModal} header="Task Modal">      
-        <AddEditTask taskDetails={taskDetails} />
-      
-      </CustomModal>
+    <DashboardContext.Provider value={{ selectedStatus, setSelectedStatus }}>
+      <div className="dashboard-container">
+        <div className="dashboard-wrapper">
+          <div>Dashboard</div>
+          <Filter />
+          <div style={{display:'flex', justifyContent:'right', padding:'10px'}}>
+          <button className="button"
+            onClick={() => {
+              setTaskDetails(null);
+              openModal();
+            }}
+          >
+            Add Task
+          </button>
+
+          </div>
+         
+          <Table rows={rows.filter(r=>r.status.includes(selectedStatus))} columns={columns} />
+          <CustomModal
+            isOpen={isOpen}
+            closeModal={closeModal}
+            header="Task Modal"
+          >
+            <AddEditTask taskDetails={taskDetails} />
+          </CustomModal>
+        </div>
       </div>
-    </div>
+    </DashboardContext.Provider>
   );
 }
 
