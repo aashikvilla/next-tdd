@@ -8,6 +8,10 @@ import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 import { getAllTasks } from "./taskApiCalls";
+//import CustomModal from "../components/Modal";
+import { useModal } from "../hooks/useModal";
+import CustomModal from "../components/CustomModal";
+import AddEditTask from "./AddEditTask";
 
 
 
@@ -20,35 +24,39 @@ export type Task = {
 }
 
 
-export const TaskColumns: GridColDef[] = [
-  { field: "id", headerName: "Id"},
-  { field: "title", headerName: "Title"},
-  { field: "description", headerName: "Description" },
-  { field: "status", headerName: "Status" },
-  { field: "priority", headerName: "Priority"},
-  {
-    field: "ss",
-    headerName: "Action",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    renderCell: (params: GridRenderCellParams) => (
-      <>
-      {params.row.id}
-        <button>Edit</button>
-        <button>Delete</button>
-      </>
-    ),
-  },
-];
+
 
 
 
 function Dashboard() {
 
+  const TaskColumns: GridColDef[] = [
+    { field: "id", headerName: "Id"},
+    { field: "title", headerName: "Title"},
+    { field: "description", headerName: "Description" },
+    { field: "status", headerName: "Status" },
+    { field: "priority", headerName: "Priority"},
+    {
+      field: "ss",
+      headerName: "Action",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      renderCell: (params: GridRenderCellParams) => (
+        <>
+        {params.row.id}
+          <button onClick={()=>handleEdit(params.row)}>Edit</button>
+          <button>Delete</button>
+        </>
+      ),
+    },
+  ];
+
   const columns = TaskColumns;
 
   const [rows, setRows] = useState([]);
+  const {isOpen, openModal , closeModal} =useModal();
+  const [taskDetails, setTaskDetails] = useState<Task|null>(null);
 
   useEffect(() => {
     getAllTasks()
@@ -62,11 +70,22 @@ function Dashboard() {
       });
   }, []);
 
+  const handleEdit=(data:Task)=>{
+    setTaskDetails(data);
+  }
+
+
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-wrapper">
         <div>Dashboard</div>
+        <button onClick={openModal}>Add Task</button>
         <Table rows={rows} columns={columns} />
+        <CustomModal isOpen={isOpen} closeModal={closeModal} header="Task Modal">      
+        <AddEditTask taskDetails={taskDetails} />
+      
+      </CustomModal>
       </div>
     </div>
   );

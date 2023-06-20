@@ -39,6 +39,12 @@ const ApiService = {
    */
   post: async (urlRoute: string, body: any): Promise<any> => request('post', urlRoute, body),
 
+  
+  /**
+   * Performs an HTTP PUT request.
+   */
+  put: async (urlRoute: string, body: any): Promise<any> => request('put', urlRoute, body),
+
 
 };
 
